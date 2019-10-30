@@ -90,20 +90,20 @@ router.delete('/:id', (req, res) => {
     Users.remove(req.params.id)
     .then(user => {
         if (user) {
-        res.status(200).json({ message: "Post deleted"});
+        res.status(200).json({ message: "User deleted"});
         } else {
-            res.status(404).json({ message: "The post with the specified ID does not exist."})
+            res.status(404).json({ message: "The user with the specified ID does not exist."})
     }
     })
     .catch(error => {
         console.log(error);
-        res.status(500).json({ message: "The post could not be removed"})
+        res.status(500).json({ message: "The user could not be removed"})
     });
 });
 
 router.put('/:id', (req, res) => {
-    if (!Object.keys(req.body).includes("title") || !Object.keys(req.body).includes("contents")){
-        return res.status(400).json({ errorMessage: "Please provide text for the comment." })
+    if (!Object.keys(req.body).includes("name")){
+        return res.status(400).json({ errorMessage: "Please provide a name for the user." })
     }
     const newInfo = req.body;
     Users.update(req.params.id, newInfo)
@@ -111,14 +111,14 @@ router.put('/:id', (req, res) => {
         if (user) {
           res.status(200).json(user);
         } else {
-          res.status(404).json({ message: "The post with the specified ID does not exist." });
+          res.status(404).json({ message: "The user with the specified ID does not exist." });
         }
       })
       .catch(error => {
         // log error to database
         console.log(error);
         res.status(500).json({
-          message: "The post information could not be modified.",
+          message: "The user information could not be modified.",
         });
       });
 });
