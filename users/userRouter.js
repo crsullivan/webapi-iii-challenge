@@ -1,11 +1,12 @@
 const express = require('express');
 const Users = require('./userDb');
+const Posts = require('../posts/postDb')
 
 const router = express.Router();
 
 router.post('/', (req, res) => {
-    if (!Object.keys(req.body).includes("title") || !Object.keys(req.body).includes("contents")){
-        return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+    if (!Object.keys(req.body).includes("name")){
+        return res.status(400).json({ errorMessage: "Please provide a name for the user." })
     }
     Users.insert(req.body)
         .then(user => {
@@ -13,21 +14,21 @@ router.post('/', (req, res) => {
         })
         .catch(error => {
             console.log(error);
-            res.status(500).json({ message: "There was an error while saving the post to the database"})
+            res.status(500).json({ message: "There was an error while saving the user to the database"})
         });
 });
 
 router.post('/:id/posts', (req, res) => {
     if (!Object.keys(req.body).includes("text")){
-        return res.status(400).json({ errorMessage: "Please provide text for the comment." })
+        return res.status(400).json({ errorMessage: "Please provide text for the post." })
     }
-    const post = {...req.body, post_id: req.params.id}; 
+    const post = {...req.body, user_id: req.params.id}; 
     console.log(req.params.id)
     console.log(post)
-    Users.insert(post)
+    Posts.insert(post)
         .then(user => {
             if (user) {
-            res.status(201).json(comment);
+            res.status(201).json(post);
             } else {
                 res.status(404).json({ message: "The post with the specified ID does not exist."})
         }
